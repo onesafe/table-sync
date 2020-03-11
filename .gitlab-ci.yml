@@ -1,0 +1,30 @@
+before_script:
+  - export env=$(echo ${CI_COMMIT_REF_NAME} | tr '[A-Z]' '[a-z]')
+  - export tag=pipe-$(echo "${CI_PIPELINE_ID}" | sed 's/(//g' | sed 's/)//g')-commit-${CI_COMMIT_SHA:0:8}
+  - export module="${CI_PROJECT_NAME}"
+  - export imagename=docker.4pd.io/env/${env}/sage/app/patrol:${tag}
+
+stages:
+  - build
+  - release
+
+build_patrol_image:
+  stage: build
+  script:
+    - make patrol
+    - docker build -t $imagename cicd/patrol
+  only:
+    - develop
+    - /^release\/.+$/
+    - /^feat\/.+$/
+    - /^bugfix\/.+$/
+
+push_patrol_image:
+  stage: release
+  script:
+    - docker push $imagename
+  only:
+    - develop
+    - /^release\/.+$/
+    - /^feat\/.+$/
+    - /^bugfix\/.+$/
