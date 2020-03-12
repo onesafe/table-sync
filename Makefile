@@ -1,10 +1,10 @@
 .PHONY: patrol clean
 
-patrol:
+tablesync:
 	mvn clean package -DskipTests
 	bash build.sh
 
 clean:
 	mvn clean
 	rm -rf target/*
-	rm -rf cicd/patrol/release
+	rm -rf cicd/release

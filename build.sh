@@ -17,14 +17,13 @@ runCommand() {
 
 cur=$(pwd)
 
-runCommand "rm -rf $cur/cicd/patrol/release"
-runCommand "mkdir $cur/cicd/patrol/release"
+runCommand "rm -rf $cur/cicd/release"
+runCommand "mkdir $cur/cicd/release"
 
-runCommand "cp -r $cur/target/lib $cur/cicd/patrol/release/lib"
-runCommand "cp $cur/target/patrol*.jar $cur/cicd/patrol/release/lib/"
+runCommand "cp $cur/target/table-sync*.jar $cur/cicd/release/"
 
-runCommand "mkdir $cur/cicd/patrol/release/bin"
-runCommand "cp $cur/src/main/resources/bin/start.sh $cur/cicd/patrol/release/bin/"
-runCommand "cp $cur/src/main/resources/bin/set_memory.sh $cur/cicd/patrol/release/bin/"
+runCommand "mkdir $cur/cicd/release/bin"
+runCommand "cp $cur/src/main/resources/bin/start.sh $cur/cicd/release/bin/"
+runCommand "cp $cur/src/main/resources/bin/set_memory.sh $cur/cicd/release/bin/"
 
-runCommand "cp -r $cur/cicd/patrol/config $cur/cicd/patrol/release/"
+runCommand "cp -r $cur/cicd/config $cur/cicd/release/"
