@@ -49,6 +49,10 @@ public class DataManager {
                 log.info(binlogInfo);
 
                 log.info(String.format("开始同步数据库表: %s", entry.getHeader().getTableName()));
+
+                String sql = rowChage.getSql();
+                log.info(String.format("SQL: %s", sql));
+
                 for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
                     if (eventType == CanalEntry.EventType.DELETE) {
                         executerDeleteSql(rowData, userService);
