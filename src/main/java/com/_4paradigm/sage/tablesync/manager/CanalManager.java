@@ -1,7 +1,6 @@
 package com._4paradigm.sage.tablesync.manager;
 
 import com._4paradigm.sage.tablesync.config.Constants;
-import com._4paradigm.sage.tablesync.service.UserService;
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
@@ -31,7 +30,8 @@ public class CanalManager {
 
         try {
             connector.connect();
-            connector.subscribe(".*\\..*");
+            connector.subscribe();
+            //connector.subscribe(".*\\..*");
             connector.rollback();
 
             while (true) {

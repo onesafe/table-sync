@@ -1,9 +1,6 @@
 package com._4paradigm.sage.tablesync.manager;
 
 import com._4paradigm.sage.tablesync.config.Constants;
-import com._4paradigm.sage.tablesync.entity.UserDMO;
-import com._4paradigm.sage.tablesync.service.BinlogService;
-import com._4paradigm.sage.tablesync.service.UserService;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -64,48 +61,7 @@ public class DataManager {
                     log.info("execute new sql");
                     jdbcTemplate.execute(newSql);
                 }
-
-//                for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
-//                    if (eventType == CanalEntry.EventType.DELETE) {
-//                        executerDeleteSql(rowData, userService);
-//                    } else if (eventType == CanalEntry.EventType.INSERT) {
-//                        executerInsertSql(rowData, userService);
-//                    } else if (eventType == CanalEntry.EventType.UPDATE){
-//                        executerUpdateSql(rowData, userService);
-//                    }
-//                }
             }
         }
-    }
-
-    private static void executerDeleteSql(CanalEntry.RowData rowData, UserService userService) throws Exception {
-        BinlogService.printColumn(rowData.getBeforeColumnsList());
-        List<CanalEntry.Column> columns = rowData.getBeforeColumnsList();
-        UserDMO userDMO = BinlogService.composeUserDmo(columns);
-        log.info(String.format("###### 删除用户: %s, 用户ID: %s", userDMO.getName(), userDMO.getId()));
-
-        userService.delete(userDMO.getId());
-    }
-
-    private static void executerInsertSql(CanalEntry.RowData rowData, UserService userService) throws Exception {
-        BinlogService.printColumn(rowData.getAfterColumnsList());
-        List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
-        UserDMO userDMO = BinlogService.composeUserDmo(columns);
-        log.info(String.format("###### 新增用户: %s, 用户ID: %s", userDMO.getName(), userDMO.getId()));
-
-        userService.insert(userDMO);
-    }
-
-    private static void executerUpdateSql(CanalEntry.RowData rowData, UserService userService) throws Exception {
-        log.info("---------------- 更新前 --------------");
-        BinlogService.printColumn(rowData.getBeforeColumnsList());
-        log.info("---------------- 更新后 --------------");
-        BinlogService.printColumn(rowData.getAfterColumnsList());
-
-        List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
-        UserDMO userDMO = BinlogService.composeUserDmo(columns);
-        log.info(String.format("###### 更新用户信息: %s, 用户ID: %s", userDMO.getName(), userDMO.getId()));
-
-        userService.update(userDMO);
     }
 }
