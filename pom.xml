@@ -24,6 +24,20 @@
 			<groupId>com.alibaba.otter</groupId>
 			<artifactId>canal.client</artifactId>
 			<version>1.1.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
