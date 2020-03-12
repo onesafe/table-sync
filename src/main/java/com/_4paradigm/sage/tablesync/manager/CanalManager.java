@@ -6,6 +6,7 @@ import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
@@ -17,7 +18,7 @@ import java.net.InetSocketAddress;
 @Component
 public class CanalManager {
 
-    public static void processData(UserService userService) throws Exception {
+    public static void processData(JdbcTemplate jdbcTemplate) throws Exception {
 
         CanalConnector connector = CanalConnectors.newSingleConnector(
                 new InetSocketAddress(Constants.canalUrl, Constants.canalPort),
@@ -43,7 +44,7 @@ public class CanalManager {
                         Thread.sleep(1000);
                     } else {
                         // log.info(String.format("message [ batchId=%s, size=%s ] \n", batchId, size));
-                        DataManager.HandleData(message.getEntries(), userService);
+                        DataManager.HandleData(message.getEntries(), jdbcTemplate);
                     }
 
                     connector.ack(batchId); // 提交确认

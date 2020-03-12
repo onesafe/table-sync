@@ -13,6 +13,7 @@ public class Constants {
     public static Integer canalPort;
     public static String srcDBName;
     public static String srcDBTable;
+    public static String destDBName;
 
     @Value("${canal.url}")
     public void setCanalUrl(String canalUrl) {
@@ -32,5 +33,10 @@ public class Constants {
     @Value("${srcdb.table}")
     public void setSrcDBTable(String srcDBTable) {
         Constants.srcDBTable = srcDBTable;
+    }
+
+    @Value("${destdb.name}")
+    public void setDestDBName(String destDBName) {
+        Constants.destDBName = destDBName;
     }
 }

@@ -6,6 +6,7 @@ import com._4paradigm.sage.tablesync.service.BinlogService;
 import com._4paradigm.sage.tablesync.service.UserService;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @Service
 public class DataManager {
 
-    public static void HandleData(List<CanalEntry.Entry> entrys, UserService userService) throws Exception {
+    public static void HandleData(List<CanalEntry.Entry> entrys, JdbcTemplate jdbcTemplate) throws Exception {
         for (CanalEntry.Entry entry : entrys) {
             if (entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONBEGIN || entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONEND) {
                 continue;
@@ -51,17 +52,28 @@ public class DataManager {
                 log.info(String.format("开始同步数据库表: %s", entry.getHeader().getTableName()));
 
                 String sql = rowChage.getSql();
-                log.info(String.format("SQL: %s", sql));
+                log.info(String.format("Origianl SQL: %s", sql));
+                String newSql = sql.replace(Constants.srcDBName, Constants.destDBName);
+                log.info(String.format("New SQL: %s", newSql));
 
-                for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
-                    if (eventType == CanalEntry.EventType.DELETE) {
-                        executerDeleteSql(rowData, userService);
-                    } else if (eventType == CanalEntry.EventType.INSERT) {
-                        executerInsertSql(rowData, userService);
-                    } else if (eventType == CanalEntry.EventType.UPDATE){
-                        executerUpdateSql(rowData, userService);
-                    }
+                if(
+                        eventType == CanalEntry.EventType.DELETE ||
+                        eventType == CanalEntry.EventType.UPDATE ||
+                        eventType == CanalEntry.EventType.INSERT
+                        ) {
+                    log.info("execute new sql");
+                    jdbcTemplate.execute(newSql);
                 }
+
+//                for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
+//                    if (eventType == CanalEntry.EventType.DELETE) {
+//                        executerDeleteSql(rowData, userService);
+//                    } else if (eventType == CanalEntry.EventType.INSERT) {
+//                        executerInsertSql(rowData, userService);
+//                    } else if (eventType == CanalEntry.EventType.UPDATE){
+//                        executerUpdateSql(rowData, userService);
+//                    }
+//                }
             }
         }
     }
