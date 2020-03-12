@@ -4,13 +4,13 @@
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS Z}\t%level\t%class\t%line\t%thread\t%msg%n" />
         </Console>
-        <RollingFile name="runtimeFile" fileName="/app/logs/active.log" filePattern="/app/logs/%d{yyyy-MM-dd.HH}.log" append="true">
+        <RollingFile name="runtimeFile" fileName="./logs/active.log" filePattern="./logs/%d{yyyy-MM-dd.HH}.log" append="true">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS Z}\t%level\t%class\t%line\t%thread\t%msg%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy />
             </Policies>
             <DefaultRolloverStrategy stopCustomActionsOnError="true">
-                <Delete basePath="/app/logs" maxDepth="2" followLinks="false">
+                <Delete basePath="./logs" maxDepth="2" followLinks="false">
                     <IfFileName glob="*.log">
                         <IfAny>
                             <IfLastModified age="7d" />

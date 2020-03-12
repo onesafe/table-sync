@@ -14,7 +14,7 @@ echo "start the $ENTRANCE server"
 cd "${CWD}" && sh ./bin/stop.sh 2>/dev/null || true
  
 # cd到CWD目录，也就是能相对引用./bin ./logs同级目录
-cd "${CWD}" && nohup java -jar lib/$ENTRANCE.jar --spring.profiles.active=prod > /dev/null 2>&1 &
+cd "${CWD}" && nohup java -Xmx1024m -jar lib/$ENTRANCE.jar --spring.profiles.active=prod > /dev/null 2>&1 &
 
 # sleep 一下，检查当前jar是否在运行
 sleep 2
