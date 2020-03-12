@@ -1,4 +1,4 @@
-配置文件application.properties
+## 配置文件application.properties
 ```bash
 # 写入的数据库
 spring.datasource.username=root  
