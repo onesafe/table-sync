@@ -47,7 +47,7 @@ public class DataManager {
                             eventType);
                     log.info(binlogInfo);
 
-                    log.info(String.format("开始同步数据库表: %s", entry.getHeader().getTableName()));
+                    log.info(String.format("Start sync table: %s", entry.getHeader().getTableName()));
 
                     String sql = rowChage.getSql();
                     log.info(String.format("Origianl SQL: %s", sql));

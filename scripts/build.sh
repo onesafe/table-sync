@@ -24,7 +24,7 @@ mkdir -p package/table-sync/conf
 cp -r ../bin  package/table-sync/
 
 cp  ../src/main/resources/$config_file  package/table-sync/conf/application.properties
-cp  ../src/main/resources/log4j2.xml  package/table-sync/conf/log4j2.xml
+cp  ../src/main/resources/log4j2-info.xml  package/table-sync/conf/log4j2.xml
 
 popd
 
