@@ -42,6 +42,7 @@ public class CanalManager {
 
                     if (batchId == -1 || size == 0) {
                         Thread.sleep(1000);
+                        continue;
                     } else {
                         // log.info(String.format("message [ batchId=%s, size=%s ] \n", batchId, size));
                         DataManager.HandleData(message.getEntries(), jdbcTemplate);
