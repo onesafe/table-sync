@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 cicd/release
+scripts/table-sync.tar.gz
 
 ### STS ###
 .apt_generated

@@ -35,16 +35,16 @@ public class CanalManager {
             connector.rollback();
 
             while (true) {
+                Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
+                long batchId = message.getId();
+
                 try {
-                    Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
-                    long batchId = message.getId();
                     int size = message.getEntries().size();
 
                     if (batchId == -1 || size == 0) {
                         Thread.sleep(1000);
-                        continue;
                     } else {
-                        // log.info(String.format("message [ batchId=%s, size=%s ] \n", batchId, size));
+                        log.info(String.format("message [ batchId=%s, size=%s ] \n", batchId, size));
                         DataManager.HandleData(message.getEntries(), jdbcTemplate);
                     }
 
@@ -52,6 +52,9 @@ public class CanalManager {
                 } catch (Exception e) {
                     log.error(e.getMessage());
                     e.printStackTrace();
+
+                    // SQL执行失败了，继续获取下一个SQL执行
+                    connector.ack(batchId); // 提交确认
                 }
             }
         } finally {

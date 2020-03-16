@@ -32,35 +32,39 @@ public class DataManager {
 
             CanalEntry.EventType eventType = rowChage.getEventType();
 
-            // 同步指定的表
-            if(Constants.srcDBName.equals(entry.getHeader().getSchemaName())
-                    && Constants.srcDBTable.equals(entry.getHeader().getTableName())) {
+            try {
+                // 同步指定的表
+                if(Constants.srcDBName.equals(entry.getHeader().getSchemaName())
+                        && Constants.srcDBTable.equals(entry.getHeader().getTableName())) {
 
-                String binlogInfo = String.format(
-                        "binlog:[%s], offset:[%s], eventLength:[%s], SchemaName:[%s], TableName:[%s], eventType:[%s]",
-                        entry.getHeader().getLogfileName(),
-                        entry.getHeader().getLogfileOffset(),
-                        entry.getHeader().getEventLength(),
-                        entry.getHeader().getSchemaName(),
-                        entry.getHeader().getTableName(),
-                        eventType);
-                log.info(binlogInfo);
+                    String binlogInfo = String.format(
+                            "binlog:[%s], offset:[%s], eventLength:[%s], SchemaName:[%s], TableName:[%s], eventType:[%s]",
+                            entry.getHeader().getLogfileName(),
+                            entry.getHeader().getLogfileOffset(),
+                            entry.getHeader().getEventLength(),
+                            entry.getHeader().getSchemaName(),
+                            entry.getHeader().getTableName(),
+                            eventType);
+                    log.info(binlogInfo);
 
-                log.info(String.format("开始同步数据库表: %s", entry.getHeader().getTableName()));
+                    log.info(String.format("开始同步数据库表: %s", entry.getHeader().getTableName()));
 
-                String sql = rowChage.getSql();
-                log.info(String.format("Origianl SQL: %s", sql));
-                String newSql = sql.replace(Constants.srcDBName, Constants.destDBName);
-                log.info(String.format("New SQL: %s", newSql));
+                    String sql = rowChage.getSql();
+                    log.info(String.format("Origianl SQL: %s", sql));
+                    String newSql = sql.replace(Constants.srcDBName, Constants.destDBName);
+                    log.info(String.format("New SQL: %s", newSql));
 
-                if(
-                        eventType == CanalEntry.EventType.DELETE ||
-                        eventType == CanalEntry.EventType.UPDATE ||
-                        eventType == CanalEntry.EventType.INSERT
-                        ) {
-                    log.info("execute new sql");
-                    jdbcTemplate.execute(newSql);
+                    if(
+                            eventType == CanalEntry.EventType.DELETE ||
+                                    eventType == CanalEntry.EventType.UPDATE ||
+                                    eventType == CanalEntry.EventType.INSERT
+                            ) {
+                        log.info("execute new sql");
+                        jdbcTemplate.execute(newSql);
+                    }
                 }
+            } catch (Exception e) {
+                throw new Exception(e);
             }
         }
     }
